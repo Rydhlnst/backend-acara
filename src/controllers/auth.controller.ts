@@ -126,7 +126,7 @@ export default {
          #swagger.security = [{
             "bearerAuth": []
          }]
-         *  */
+        */
         try {
             const user = req.user;
             const result = await userModel.findById(user?.id);
