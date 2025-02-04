@@ -61,6 +61,11 @@ export default {
     },
 
     async login(req: Request, res: Response) {
+        /**
+         #swagger.requestBody = {
+         required: true,
+         schema: {$ref: "#components/schemas/LoginRequest"}}
+         */
         const {identifier, password} = req.body as unknown as TLogin
         try {
             // Mengambil data user berdasarkan identifier -> Email / Username
@@ -117,6 +122,11 @@ export default {
 
     // API AUTH ME
     async me(req: IReqUser, res: Response) {
+        /**
+         #swagger.security = [{
+            "bearerAuth": []
+         }]
+         *  */
         try {
             const user = req.user;
             const result = await userModel.findById(user?.id);

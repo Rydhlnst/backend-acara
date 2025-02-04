@@ -70,18 +70,16 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "identifier": {
-                    "example": "any"
-                  },
-                  "password": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#components/schemas/LoginRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#components/schemas/LoginRequest"
               }
             }
           }
@@ -101,7 +99,12 @@
           "403": {
             "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -124,6 +127,9 @@
             "type": "string",
             "example": "12341234"
           }
+        },
+        "xml": {
+          "name": "LoginRequest"
         }
       }
     }
