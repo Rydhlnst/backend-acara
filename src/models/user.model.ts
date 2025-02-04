@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { encrypt } from "../utils/encryption";
 
 export interface User {
     fullName: string;
@@ -51,8 +52,21 @@ const userSchema = new Schema<User>({
    // Mengetahui kapan data dibuat
    timestamps: true});
 
+// Sebelum disave akan "PRE" dan akan mengencrypt
+userSchema.pre("save", function(next) {
+   const user = this;
+   user.password = encrypt(user.password);
+   next();
+})
 
-// Nama untuk tabel datanya "User"   
+// Menghilangkan password di JSON tetapi tetap bisa login
+userSchema.methods.toJSON = function() {
+   const user = this.toObject();
+   delete user.password;
+   return user;
+}
+
+// Nama untuk tabel datanya "User"  
 const userModel = mongoose.model("User", userSchema);
 
 export default userModel;
