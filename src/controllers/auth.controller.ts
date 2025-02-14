@@ -22,8 +22,18 @@ const registerValidateSchema = Yup.object({
     fullName: Yup.string().required(),
     userName: Yup.string().required(),
     email: Yup.string().required(),
-    password: Yup.string().required(),
-    confirmPassword: Yup.string().required()
+    // Mengecek apakah password sudah memiliki 8 huruf dan huruf kapital
+    password: Yup.string().required().min(8, "Password must be at least 8 characters").test("at-least-one-uppercase-letter", "Contains at least one uppercase letter", (value) => {
+        if (!value) return false;
+        const regex = /^(?=.*[A-Z])/;
+        return regex.test(value);
+    }).test("at-least-one-uppercase-letter", "Contains at least one uppercase letter", (value) => {
+        if (!value) return false;
+        const regex = /^(?=.*\d)/;
+        return regex.test(value);
+    }),
+    // Mengecek apakah passwordnya sama
+    confirmPassword: Yup.string().required().oneOf([Yup.ref("password"), ""], "Password not match")
 })
 
 export default {
@@ -75,7 +85,7 @@ export default {
         try {
             // Mengambil data user berdasarkan identifier -> Email / Username
             const userByIdentifier = await userModel.findOne({
-                // Filter 2 data jika salah 1 ada, maka YES
+                // Filter 2 data jika salah 1 ada, maka YES dan dapat login
                 $or: [
                     {
                         email: identifier,
@@ -83,7 +93,9 @@ export default {
                     {
                         userName: identifier,
                     }
-                ]
+                ],
+                // Hanya user yang active yang bisa login
+                isActive: true
             });
 
             // Jika tidak ada user yang tersimpan di DB
@@ -140,6 +152,38 @@ export default {
             res.status(200).json({
                 message: "Success get user profile",
                 data: result
+            })
+        } catch (error) {
+            const err = error as unknown as Error;
+            res.status(400).json({
+                message: err.message,
+                data: null
+            })
+        }
+    },
+
+    async activation(req: Request, res: Response) {
+        /**
+         #swagger.tags = ["Authentication"]
+         #swagger.requestBody = {
+            required: true,
+            schema: {$ref: '#/components/schemas/ActivationRequest'}
+         }
+         */
+        try {
+            // 
+            const { code } = req.body as {code: string};
+
+            const user = await userModel.findOneAndUpdate({
+                activationCode: code,
+            }, {
+                isActive: true
+            }, {
+                new: true
+            });
+            res.status(200).json({
+                message: "User successfully activated.",
+                data: user
             })
         } catch (error) {
             const err = error as unknown as Error;

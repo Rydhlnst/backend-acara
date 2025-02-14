@@ -28,6 +28,16 @@ const doc = {
             LoginRequest: {
                 identifier: "rydhlnst@gmail.com",
                 password: "12341234"
+            },
+            RegisterRequest: {
+                fullName: "Dapa Nandos",
+                userName: "Dapa2000",
+                email: "Dapa2000@yopmail.com",
+                password: "12341234",
+                confirmPassword: "12341234"
+            },
+            ActivationRequest: {
+                code: "abcdef"
             }
         }
     }
