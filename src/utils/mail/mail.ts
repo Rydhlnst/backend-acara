@@ -18,7 +18,7 @@ import {
 // Mail Verification
 const transporter = nodemailer.createTransport({
     service: EMAIL_SMTP_SERVICE_NAME,
-    host: "rydhlnst@gmail.com",
+    host: EMAIL_SMTP_HOST,
     port: EMAIL_SMTP_PORT,
     secure: EMAIL_SMTP_SECURE,
     auth: {
