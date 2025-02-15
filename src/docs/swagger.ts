@@ -15,6 +15,10 @@ const doc = {
         {
         url: "https://backend-acara-ruby.vercel.app/api",
         description: "Deploy Server"
+    },
+    {
+        url: "https://backend-acara-duxemrt5k-rydhlnsts-projects.vercel.app/api",
+        description: "Deploy Server v1"
     }
     ],
     components: {
